@@ -43,16 +43,22 @@ flowchart TD
     
     Logs --> |Final Status| Complete([Website Deployed<br/>User receives URL])
     
-    style Start fill:#f9f,stroke:#333,stroke-width:2px
-    style Complete fill:#9f9,stroke:#333,stroke-width:2px
-    style Rephrase fill:#bbf,stroke:#333,stroke-width:2px
-    style Analyze fill:#bbf,stroke:#333,stroke-width:2px
-    style Verify fill:#bbf,stroke:#333,stroke-width:2px
-    style Filter fill:#fbf,stroke:#333,stroke-width:2px
-    style Plan fill:#bbf,stroke:#333,stroke-width:2px
-    style FileGen fill:#bfb,stroke:#333,stroke-width:2px
-    style Validate fill:#fbb,stroke:#333,stroke-width:2px
-    style Deploy fill:#fbf,stroke:#333,stroke-width:2px
+    style Start fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    style Complete fill:#9f9,stroke:#333,stroke-width:2px,color:#000
+    style Frontend color:#000
+    style Backend color:#000
+    style Rephrase fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    style Analyze fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    style Verify fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    style Filter fill:#fbf,stroke:#333,stroke-width:2px,color:#000
+    style Plan fill:#bbf,stroke:#333,stroke-width:2px,color:#000
+    style Generate color:#000
+    style FileGen fill:#bfb,stroke:#333,stroke-width:2px,color:#000
+    style Validate fill:#fbb,stroke:#333,stroke-width:2px,color:#000
+    style Assemble color:#000
+    style Deploy fill:#fbf,stroke:#333,stroke-width:2px,color:#000
+    style Response color:#000
+    style Logs color:#000
 ```
 
 ## 🔄 Detailed Step-by-Step Process
