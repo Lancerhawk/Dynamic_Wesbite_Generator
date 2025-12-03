@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SleekCMS - AI Website Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'orange': {
+                50: '#fff7ed',
+                100: '#ffedd5',
+                200: '#fed7aa',
+                300: '#fdba74',
+                400: '#fb923c',
+                500: '#f97316',
+                600: '#ea580c',
+                700: '#c2410c',
+                800: '#9a3412',
+                900: '#7c2d12',
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="min-h-screen bg-black text-white">
+    <div class="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
+      <!-- Header -->
+      <header class="text-center mb-10">
+        <h1 class="text-5xl md:text-6xl font-bold mb-3 text-white">
+          Sleek<span class="text-orange-500">CMS</span>
+        </h1>
+        <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+          AI-Powered Website Generator
+        </p>
+        <p class="text-sm md:text-base text-gray-400 mt-2 max-w-xl mx-auto">
+          Describe your vision, and we'll generate a complete, deployed website in seconds
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Panel: Generator Form -->
+        <div class="lg:col-span-1 bg-white border-2 border-gray-800 rounded-lg shadow-lg p-6">
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold mb-2 text-black">Generate Website</h2>
+            <p class="text-sm text-gray-600">
+              Example: <span class="text-orange-600 font-medium">"Show me all action movies from 2024"</span>
+            </p>
+          </div>
+
+          <form id="intent-form" class="space-y-5">
+            <div>
+              <label class="block text-sm font-semibold text-black mb-3">
+                AI Model
+              </label>
+              <div class="grid grid-cols-2 gap-3">
+                <label for="provider-openrouter" class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500 transition-all group has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50">
+                  <input type="radio" name="provider" value="openrouter" id="provider-openrouter" class="sr-only" checked>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-bold text-black">OpenRouter</span>
+                    <div id="radio-openrouter" class="w-4 h-4 border-2 border-gray-400 rounded-full bg-orange-500 border-orange-500 flex items-center justify-center">
+                      <div class="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                  </div>
+                  <span class="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded w-fit font-semibold">Sonnet 4.5</span>
+                  <p class="text-xs text-gray-600 mt-1">Higher quality</p>
+                </label>
+                <label for="provider-anthropic" class="relative flex flex-col p-4 bg-gray-50 border-2 border-gray-300 rounded-lg cursor-pointer hover:border-orange-500 transition-all group has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50">
+                  <input type="radio" name="provider" value="anthropic" id="provider-anthropic" class="sr-only">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-bold text-black">Anthropic</span>
+                    <div id="radio-anthropic" class="w-4 h-4 border-2 border-gray-400 rounded-full flex items-center justify-center">
+                      <div class="w-2 h-2 bg-white rounded-full opacity-0"></div>
+                    </div>
+                  </div>
+                  <span class="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded w-fit font-semibold">Haiku</span>
+                  <p class="text-xs text-gray-600 mt-1">Faster, free</p>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label for="intent" class="block text-sm font-semibold text-black mb-2">
+                Your Intent
+              </label>
+              <textarea
+                id="intent"
+                name="intent"
+                rows="5"
+                placeholder="e.g. Show me all action movies from 2024"
+                class="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              id="generate-btn"
+              class="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <span>Generate Website</span>
+            </button>
+          </form>
+
+          <!-- Result Section -->
+          <div id="result" hidden class="mt-6 p-4 bg-green-50 border-2 border-green-200 rounded-lg">
+            <div id="result-content" class="text-sm text-black"></div>
+          </div>
+
+          <!-- Error Section -->
+          <div id="error" hidden class="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-700 text-sm font-medium"></div>
+        </div>
+
+        <!-- Right Panel: Logs Display -->
+        <div class="lg:col-span-2 bg-gray-900 border-2 border-gray-700 rounded-lg shadow-lg p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-white">Generation Logs</h2>
+            <button id="clear-logs-btn" class="text-xs px-3 py-1.5 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded text-white transition-colors font-medium">
+              Clear
+            </button>
+          </div>
+
+          <div id="logs-container" class="relative h-[600px] bg-black rounded border border-gray-700 overflow-hidden">
+            <div id="logs-content" class="h-full overflow-y-auto p-4 font-mono text-xs space-y-1">
+              <div class="text-gray-500 text-center py-12">
+                <svg class="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p class="text-sm text-gray-400">Waiting for generation to start...</p>
+                <p class="text-xs text-gray-600 mt-1">Logs will appear here in real-time</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-12 text-center text-sm text-gray-500">
+        <p>Powered by Claude AI & Vercel</p>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        const form = document.getElementById("intent-form");
+        const textarea = document.getElementById("intent");
+        const btn = document.getElementById("generate-btn");
+        const result = document.getElementById("result");
+        const resultContent = document.getElementById("result-content");
+        const errorEl = document.getElementById("error");
+        const logsContainer = document.getElementById("logs-content");
+        const clearLogsBtn = document.getElementById("clear-logs-btn");
+        const providerOpenRouter = document.getElementById("provider-openrouter");
+        const providerAnthropic = document.getElementById("provider-anthropic");
+        const radioOpenRouter = document.getElementById("radio-openrouter");
+        const radioAnthropic = document.getElementById("radio-anthropic");
+
+        const API_BASE = "http://localhost:3000";
+        let currentProjectId = null;
+        let logPollInterval = null;
+        let lastLogCount = 0;
+
+        // Update radio button visuals
+        function updateRadioButtons() {
+          if (providerOpenRouter.checked) {
+            radioOpenRouter.className = "w-4 h-4 border-2 border-orange-500 rounded-full bg-orange-500 flex items-center justify-center";
+            radioOpenRouter.querySelector("div").classList.remove("opacity-0");
+            radioAnthropic.className = "w-4 h-4 border-2 border-gray-400 rounded-full flex items-center justify-center";
+            radioAnthropic.querySelector("div").classList.add("opacity-0");
+          } else if (providerAnthropic.checked) {
+            radioAnthropic.className = "w-4 h-4 border-2 border-orange-500 rounded-full bg-orange-500 flex items-center justify-center";
+            radioAnthropic.querySelector("div").classList.remove("opacity-0");
+            radioOpenRouter.className = "w-4 h-4 border-2 border-gray-400 rounded-full flex items-center justify-center";
+            radioOpenRouter.querySelector("div").classList.add("opacity-0");
+          }
+        }
+
+        // Add event listeners for radio buttons
+        providerOpenRouter.addEventListener("change", updateRadioButtons);
+        providerAnthropic.addEventListener("change", updateRadioButtons);
+        
+        // Initialize
+        updateRadioButtons();
+
+        function addLog(message, type = "info") {
+          const isEmpty = logsContainer.querySelector(".text-gray-500");
+          if (isEmpty) {
+            logsContainer.innerHTML = "";
+          }
+
+          const logEntry = document.createElement("div");
+          logEntry.className = "flex items-start gap-3 group hover:bg-gray-800 px-2 py-1 rounded transition-colors";
+          
+          const timestamp = new Date().toLocaleTimeString();
+          const colors = {
+            info: "text-gray-300",
+            success: "text-green-400",
+            warning: "text-yellow-400",
+            error: "text-red-400",
+            step: "text-orange-400"
+          };
+
+          const icons = {
+            info: "→",
+            success: "✓",
+            warning: "⚠",
+            error: "✗",
+            step: "▶"
+          };
+
+          logEntry.innerHTML = `
+            <span class="text-gray-600 text-[10px] mt-0.5 flex-shrink-0 font-mono">${timestamp}</span>
+            <span class="${colors[type] || colors.info} font-bold flex-shrink-0">${icons[type] || icons.info}</span>
+            <span class="text-gray-300 flex-1 break-words">${escapeHtml(message)}</span>
+          `;
+
+          logsContainer.appendChild(logEntry);
+          logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+          const div = document.createElement("div");
+          div.textContent = text;
+          return div.innerHTML;
+        }
+
+        function parseLogMessage(message) {
+          if (message.includes("[website-generator]")) {
+            if (message.includes("Starting generation")) {
+              const match = message.match(/project (project-\d+)/);
+              if (match) currentProjectId = match[1];
+              return { type: "step", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("Planning architecture")) {
+              return { type: "info", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("Planned")) {
+              return { type: "success", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("Generating file")) {
+              return { type: "step", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("✓ Generated")) {
+              return { type: "success", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("Validating")) {
+              return { type: "info", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("Fixed")) {
+              return { type: "warning", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("✓ All files validated")) {
+              return { type: "success", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("✓ Project") && message.includes("completed")) {
+              return { type: "success", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("Deploying")) {
+              return { type: "step", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+            if (message.includes("✓ Deployed")) {
+              return { type: "success", text: message.replace(/\[website-generator\]\s*/, "") };
+            }
+          }
+          
+          if (message.includes("[vercel-deployer]")) {
+            if (message.includes("Starting deployment")) {
+              return { type: "step", text: message.replace(/\[vercel-deployer\]\s*/, "") };
+            }
+            if (message.includes("✓ Deployed")) {
+              return { type: "success", text: message.replace(/\[vercel-deployer\]\s*/, "") };
+            }
+            return { type: "info", text: message.replace(/\[vercel-deployer\]\s*/, "") };
+          }
+
+          if (message.includes("[website-validator]")) {
+            if (message.includes("Found")) {
+              return { type: "warning", text: message.replace(/\[website-validator\]\s*/, "") };
+            }
+            if (message.includes("✓ Fixed")) {
+              return { type: "success", text: message.replace(/\[website-validator\]\s*/, "") };
+            }
+            return { type: "info", text: message.replace(/\[website-validator\]\s*/, "") };
+          }
+
+          return { type: "info", text: message };
+        }
+
+        function pollLogs() {
+          if (!currentProjectId) return;
+
+          fetch(`${API_BASE}/api/logs/${currentProjectId}`)
+            .then(res => res.json())
+            .then(data => {
+              if (data.logs && Array.isArray(data.logs)) {
+                // Only add new logs
+                if (data.logs.length > lastLogCount) {
+                  const newLogs = data.logs.slice(lastLogCount);
+                  newLogs.forEach(log => {
+                    const message = typeof log === 'string' ? log : (log.message || JSON.stringify(log));
+                    const parsed = parseLogMessage(message);
+                    addLog(parsed.text, parsed.type);
+                  });
+                  lastLogCount = data.logs.length;
+                }
+              }
+            })
+            .catch(err => {
+              // Silently handle errors during polling
+            });
+        }
+
+        function startLogPolling() {
+          if (logPollInterval) clearInterval(logPollInterval);
+          lastLogCount = 0;
+          // Poll more frequently for real-time updates
+          logPollInterval = setInterval(pollLogs, 200); // Poll every 200ms for near real-time
+        }
+
+        function stopLogPolling() {
+          if (logPollInterval) {
+            clearInterval(logPollInterval);
+            logPollInterval = null;
+          }
+        }
+
+        clearLogsBtn.addEventListener("click", () => {
+          logsContainer.innerHTML = `
+            <div class="text-gray-500 text-center py-12">
+              <svg class="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <p class="text-sm text-gray-400">Logs cleared</p>
+            </div>
+          `;
+        });
+
+        function setLoading(loading) {
+          btn.disabled = loading;
+          errorEl.hidden = true;
+          result.hidden = true;
+          
+          if (loading) {
+            btn.innerHTML = `
+              <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span>Generating...</span>
+            `;
+            addLog("Starting website generation...", "step");
+            startLogPolling();
+          } else {
+            btn.innerHTML = `
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+              <span>Generate Website</span>
+            `;
+            stopLogPolling();
+          }
+        }
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const intent = textarea.value.trim();
+          if (!intent) {
+            errorEl.hidden = false;
+            errorEl.textContent = "Please enter an intent first.";
+            return;
+          }
+
+          // Clear previous logs
+          logsContainer.innerHTML = "";
+          currentProjectId = null;
+          lastLogCount = 0;
+
+          // Get selected provider
+          const providerRadio = document.querySelector('input[name="provider"]:checked');
+          const provider = providerRadio ? providerRadio.value : "openrouter";
+
+          setLoading(true);
+
+          try {
+            const resp = await fetch(API_BASE + "/api/generate-website", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ intent, provider })
+            });
+
+            if (!resp.ok) {
+              const data = await resp.json().catch(() => ({}));
+              throw new Error(data.error || "Request failed with status " + resp.status);
+            }
+
+            const data = await resp.json();
+            currentProjectId = data.projectId;
+            
+            // Start polling immediately
+            startLogPolling();
+
+            // Poll for completion status
+            const checkStatus = setInterval(async () => {
+              try {
+                const statusResp = await fetch(`${API_BASE}/api/status/${currentProjectId}`);
+                if (statusResp.ok) {
+                  const statusData = await statusResp.json();
+                  if (statusData.status === "completed" || statusData.status === "failed") {
+                    clearInterval(checkStatus);
+                    setLoading(false);
+                    result.hidden = false;
+                    
+                    if (statusData.deployedUrl) {
+                      resultContent.innerHTML = `
+                        <div class="flex items-center gap-2 mb-3">
+                          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                          <strong class="text-green-700 font-bold">Website Generated & Deployed!</strong>
+                        </div>
+                        <p class="text-gray-700 mb-2 font-medium">Your website is live at:</p>
+                        <a href="${statusData.deployedUrl}" target="_blank" class="text-orange-600 hover:text-orange-700 underline break-all font-mono text-xs font-semibold block">
+                          ${statusData.deployedUrl}
+                        </a>
+                      `;
+                      addLog(`✓ Website deployed successfully: ${statusData.deployedUrl}`, "success");
+                    } else {
+                      resultContent.innerHTML = `
+                        <div class="flex items-center gap-2 mb-3">
+                          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                          </svg>
+                          <strong class="text-blue-700 font-bold">Website Generated!</strong>
+                        </div>
+                        <p class="text-gray-700 text-xs font-mono break-all">${statusData.projectPath || "Generated successfully"}</p>
+                      `;
+                      addLog("✓ Website generated successfully", "success");
+                    }
+                  }
+                }
+              } catch (err) {
+                // Ignore errors during status polling
+              }
+            }, 1000); // Check status every second
+
+          } catch (err) {
+            setLoading(false);
+            errorEl.hidden = false;
+            errorEl.textContent = (err && err.message) || "Something went wrong while generating the website.";
+            addLog(`✗ Error: ${err.message || "Generation failed"}`, "error");
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

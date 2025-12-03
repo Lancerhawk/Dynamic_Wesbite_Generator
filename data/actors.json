@@ -1,0 +1,52 @@
+[
+  {
+    "id": "actor-1",
+    "name": "Amitabh Bachchan",
+    "gender": "Male",
+    "location": "Mumbai, India",
+    "about": "Legendary Indian actor with over 50 years in Bollywood, known for iconic roles in Sholay, Deewar, and many more",
+    "bestFilms": ["Sholay", "Deewar", "Zanjeer", "Don"],
+    "awards": ["Padma Vibhushan", "National Film Award", "Filmfare Awards"],
+    "image": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "actor-2",
+    "name": "Priyanka Chopra",
+    "gender": "Female",
+    "location": "Mumbai, India",
+    "about": "International actress, producer, and former Miss World, known for roles in Quantico and Bollywood films",
+    "bestFilms": ["Bajirao Mastani", "Barfi!", "Fashion", "Mary Kom"],
+    "awards": ["National Film Award", "Padma Shri", "People's Choice Award"],
+    "image": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "actor-3",
+    "name": "Shah Rukh Khan",
+    "gender": "Male",
+    "location": "Mumbai, India",
+    "about": "Bollywood superstar known as the 'King of Romance', with over 100 films to his credit",
+    "bestFilms": ["Dilwale Dulhania Le Jayenge", "My Name is Khan", "Chak De India", "Swades"],
+    "awards": ["Padma Shri", "Filmfare Awards", "IIFA Awards"],
+    "image": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "actor-4",
+    "name": "Deepika Padukone",
+    "gender": "Female",
+    "location": "Bangalore, India",
+    "about": "Leading Bollywood actress known for her versatile performances and global appeal",
+    "bestFilms": ["Padmaavat", "Bajirao Mastani", "Piku", "Chennai Express"],
+    "awards": ["Filmfare Awards", "IIFA Awards", "Screen Awards"],
+    "image": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "actor-5",
+    "name": "Aamir Khan",
+    "gender": "Male",
+    "location": "Mumbai, India",
+    "about": "Perfectionist actor and producer known for socially relevant films and box office hits",
+    "bestFilms": ["Dangal", "3 Idiots", "PK", "Lagaan"],
+    "awards": ["Padma Bhushan", "National Film Award", "Filmfare Awards"],
+    "image": "https://via.placeholder.com/200"
+  }
+]
