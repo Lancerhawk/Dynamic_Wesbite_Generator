@@ -29,7 +29,7 @@ export async function planArchitecture(
     return sample;
   });
 
-  const systemPrompt = `You are designing a small static website architecture.
+  const systemPrompt = `You are designing a static website architecture. Analyze the user's intent to determine the appropriate number of pages.
 Return ONLY compact JSON matching this schema, no markdown, no backticks, no explanation:
 {
   "files": [
@@ -45,26 +45,44 @@ STRICT RULES:
 - You MUST include "index.html" (home/landing page) and "app.js" (shared JavaScript) - these are REQUIRED
 - DO NOT create a separate "styles.css" file - all styles will be embedded in HTML using Tailwind CSS
 
-**MANDATORY PAGE CREATION RULES - READ CAREFULLY:**
-- If the user intent mentions ANY of these, you MUST create the corresponding page:
-  * "about page", "mission", "vision", "about us", "company mission", "company vision" → CREATE "about.html" (MANDATORY)
-  * "products page", "services page", "browse", "products", "services", "showcase services" → CREATE "browse.html" (MANDATORY)
-  * "detail pages", "individual product", "each product", "product details", "dedicated pages for each" → CREATE "details.html" (MANDATORY)
-  * "contact page", "contact information", "contact form", "location", "email address" → CREATE "contact.html" (MANDATORY)
-- **DO NOT BE CONSERVATIVE - if the user mentions a page type, CREATE IT!**
-- **If user says "multi-page website" or lists multiple pages, create ALL of them!**
+**INTELLIGENT PAGE CREATION - ANALYZE USER INTENT COMPLEXITY:**
 
-- Pages MUST link to each other using actual file paths: href="about.html", href="details.html", etc. (NOT hash-based #links)
-- NEVER create any JSON, CSV, XML, or data files - the backend provides data.json automatically
-- NEVER create image files, config files, or any non-code files
-- File names must be lowercase with dashes (e.g., "movie-details.html", "about.html")
+1. **SIMPLE REQUESTS** (1-2 pages total):
+   - User asks to "show", "display", "list", "browse" data without mentioning specific pages
+   - Examples: "show me movies", "display products", "list companies"
+   - Result: ["index.html", "app.js"] ONLY
+
+2. **MODERATE REQUESTS** (2-3 pages):
+   - User mentions ONE specific page type: "about page", "contact page", "products page"
+   - Examples: "show movies with an about page", "products with contact info"
+   - Result: ["index.html", "about.html" OR "contact.html" OR "browse.html", "app.js"]
+
+3. **COMPLEX REQUESTS** (4+ pages):
+   - User mentions: "portfolio", "company website", "business website", "multi-page", "website with multiple pages"
+   - User explicitly lists multiple pages: "about, products, contact"
+   - User mentions: "mission", "vision", "services", "team", "testimonials" (business/company context)
+   - Examples: "company website with about and products", "portfolio website", "business site with mission and contact"
+   - Result: Create ALL mentioned pages: ["index.html", "about.html", "browse.html", "details.html", "contact.html", "app.js"]
+
+**PAGE TYPE MAPPING:**
+- "about page", "mission", "vision", "about us", "company mission", "company vision" → "about.html"
+- "products page", "services page", "browse", "products", "services", "showcase" → "browse.html"
+- "detail pages", "individual", "each item", "product details", "dedicated pages" → "details.html"
+- "contact page", "contact information", "contact form", "location", "email" → "contact.html"
+
+**IMPORTANT:**
+- If user intent is SIMPLE (just showing/listing data), create ONLY index.html + app.js
+- If user explicitly mentions pages or uses complex terms (portfolio, company, business), create those pages
+- Pages MUST link using actual file paths: href="about.html" (NOT hash-based #links)
+- NEVER create JSON, CSV, XML, or data files - backend provides data.json automatically
+- File names must be lowercase with dashes
 - index.html should have search box with id="search-input" and filters
-- All pages should have navigation bar linking to other existing pages only
 
 Examples:
-- Simple intent ("show me movies" with NO page requests): ["index.html", "app.js"]
-- User requests pages ("company website with about, products, details, contact"): ["index.html", "about.html", "browse.html", "details.html", "contact.html", "app.js"] ← CREATE ALL 5 PAGES!
-- User says "multi-page website with about and contact": ["index.html", "about.html", "contact.html", "app.js"]`;
+- "show me action movies" → SIMPLE → ["index.html", "app.js"]
+- "movies with an about page" → MODERATE → ["index.html", "about.html", "app.js"]
+- "company website with mission and products" → COMPLEX → ["index.html", "about.html", "browse.html", "app.js"]
+- "portfolio website" → COMPLEX → ["index.html", "about.html", "browse.html", "contact.html", "app.js"]`;
 
   try {
     const client = getAnthropicClient(provider);
@@ -85,14 +103,14 @@ Examples:
                 `Data source: ${dataSource}\n` +
                 `Here is a small sample of the filtered data (JSON):\n` +
                 JSON.stringify(dataSample).slice(0, 2000) +
-                `\n\n🚨 CRITICAL INSTRUCTIONS - READ CAREFULLY: 🚨\n` +
-                `The user intent above explicitly mentions specific pages. You MUST create ALL pages mentioned:\n` +
-                `- If intent mentions "about page", "mission", "vision" → CREATE "about.html"\n` +
-                `- If intent mentions "products page", "services page", "browse" → CREATE "browse.html"\n` +
-                `- If intent mentions "detail pages", "individual product", "each product" → CREATE "details.html"\n` +
-                `- If intent mentions "contact page", "contact information", "location", "email" → CREATE "contact.html"\n` +
-                `\nDO NOT create only 2 files. If the user mentions multiple pages, create ALL of them!\n` +
-                `Return ONLY the JSON architecture object with ALL required pages.`
+                `\n\n🚨 ANALYZE INTENT COMPLEXITY - READ CAREFULLY: 🚨\n` +
+                `1. Is this a SIMPLE request? (just showing/listing data without page mentions)\n` +
+                `   → Create ONLY: ["index.html", "app.js"]\n` +
+                `2. Is this a MODERATE request? (mentions ONE specific page type)\n` +
+                `   → Create: ["index.html", "mentioned-page.html", "app.js"]\n` +
+                `3. Is this a COMPLEX request? (mentions "portfolio", "company", "business", "multi-page", or lists multiple pages)\n` +
+                `   → Create ALL mentioned pages: ["index.html", "about.html", "browse.html", "contact.html", "app.js"]\n` +
+                `\nAnalyze the intent above and determine the appropriate page count. Return ONLY the JSON architecture object.`
             }
           ]
         }
@@ -122,37 +140,47 @@ Examples:
     
     console.log(`[architecture-planner] AI planned ${parsed.files.length} files:`, parsed.files.map((f: any) => f.fileName).join(", "));
     
+    // Smart page detection based on intent complexity
     const intentLower = intent.toLowerCase();
-    const requestedPages: string[] = [];
-    if (intentLower.includes("about") || intentLower.includes("mission") || intentLower.includes("vision")) {
-      requestedPages.push("about.html");
-    }
-    if (intentLower.includes("product") || intentLower.includes("service") || intentLower.includes("browse")) {
-      requestedPages.push("browse.html");
-    }
-    if (intentLower.includes("detail") || intentLower.includes("individual")) {
-      requestedPages.push("details.html");
-    }
-    if (intentLower.includes("contact")) {
-      requestedPages.push("contact.html");
-    }
+    const isSimpleRequest = !intentLower.match(/\b(portfolio|company|business|multi-page|website|about|contact|products|services|mission|vision|team|testimonials)\b/);
+    const isComplexRequest = intentLower.match(/\b(portfolio|company|business|multi-page|website)\b/) || 
+                             (intentLower.match(/\b(about|contact|products|services|mission|vision)\b/g)?.length || 0) >= 2;
     
-    if (requestedPages.length > 0) {
-      const missingPages = requestedPages.filter(page => !parsed.files.some((f: any) => f.fileName === page));
-      if (missingPages.length > 0) {
-        console.warn(`[architecture-planner] ⚠ User requested pages but AI didn't create them: ${missingPages.join(", ")}`);
-        console.warn(`[architecture-planner] Adding missing pages...`);
-        for (const page of missingPages) {
-          const purpose = page === "about.html" ? "About page with mission and vision" :
-                         page === "browse.html" ? "Browse page for products/services" :
-                         page === "details.html" ? "Detail pages for individual items" :
-                         "Contact page with location and email";
-          if (!parsed.files.some((f: any) => f.fileName === page)) {
-            parsed.files.push({ fileName: page, purpose, kind: "page" });
-          }
-        }
-        console.log(`[architecture-planner] After adding missing pages: ${parsed.files.length} files`);
+    // Only add pages if it's NOT a simple request
+    if (!isSimpleRequest) {
+      const requestedPages: string[] = [];
+      if (intentLower.includes("about") || intentLower.includes("mission") || intentLower.includes("vision")) {
+        requestedPages.push("about.html");
       }
+      if (intentLower.includes("product") || intentLower.includes("service") || intentLower.includes("browse")) {
+        requestedPages.push("browse.html");
+      }
+      if (intentLower.includes("detail") || intentLower.includes("individual")) {
+        requestedPages.push("details.html");
+      }
+      if (intentLower.includes("contact")) {
+        requestedPages.push("contact.html");
+      }
+      
+      // For complex requests, ensure all mentioned pages are included
+      if (isComplexRequest && requestedPages.length > 0) {
+        const missingPages = requestedPages.filter(page => !parsed.files.some((f: any) => f.fileName === page));
+        if (missingPages.length > 0) {
+          console.warn(`[architecture-planner] ⚠ Complex request detected - adding missing pages: ${missingPages.join(", ")}`);
+          for (const page of missingPages) {
+            const purpose = page === "about.html" ? "About page with mission and vision" :
+                           page === "browse.html" ? "Browse page for products/services" :
+                           page === "details.html" ? "Detail pages for individual items" :
+                           "Contact page with location and email";
+            if (!parsed.files.some((f: any) => f.fileName === page)) {
+              parsed.files.push({ fileName: page, purpose, kind: "page" });
+            }
+          }
+          console.log(`[architecture-planner] After adding missing pages: ${parsed.files.length} files`);
+        }
+      }
+    } else {
+      console.log(`[architecture-planner] Simple request detected - keeping minimal architecture`);
     }
 
     const files: PlannedFile[] = parsed.files

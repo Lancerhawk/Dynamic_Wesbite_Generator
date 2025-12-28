@@ -93,7 +93,8 @@ export async function generateWebsite(
   outputRoot: string,
   publicBasePath = "/generated-sites",
   provider: "openrouter" | "anthropic" = "openrouter",
-  existingProjectId?: string
+  existingProjectId?: string,
+  websiteDetails?: { websiteName?: string; tagline?: string; description?: string }
 ): Promise<GenerationStatus> {
   const projectId = existingProjectId || `project-${Date.now()}`;
   const projectDir = path.join(outputRoot, projectId);
@@ -131,10 +132,22 @@ export async function generateWebsite(
       `[website-generator] Planned ${plan.files.length} files for project ${projectId}`
     );
 
+    // Get list of HTML pages that will be created
+    const htmlPages = plan.files.filter(f => f.fileName.endsWith(".html")).map(f => f.fileName);
+    
     for (const file of plan.files) {
       console.log(`[website-generator] Generating file "${file.fileName}"...`);
       const startTime = Date.now();
-      let code = await generateFile(file.fileName, file.purpose, filteredData, analysis.dataSource, provider);
+      let code = await generateFile(
+        file.fileName, 
+        file.purpose, 
+        filteredData, 
+        analysis.dataSource, 
+        provider, 
+        intent,
+        htmlPages, // Pass list of existing pages for navigation
+        websiteDetails // Pass website details
+      );
       
       code = code.trim();
       if (code.includes("```")) {

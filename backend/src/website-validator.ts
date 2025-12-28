@@ -49,6 +49,9 @@ CRITICAL ISSUES TO CHECK:
 3. Missing critical functionality (data loading, rendering, etc.)
 4. Broken references (missing IDs, wrong file paths, etc.)
 5. Invalid HTML/CSS/JS structure
+6. Navigation links to non-existent pages - navbar should ONLY link to pages that actually exist
+7. Card alignment issues - cards must use proper grid layout with equal heights and proper spacing
+8. Layout breaking - cards overflowing or not aligned properly in grid
 
 Return ONLY a JSON array of issues in this format:
 [

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>SleekCMS - AI Website Generator</title>
+    <title>SkyThought - AI Website Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -33,7 +33,7 @@
       <!-- Header -->
       <header class="text-center mb-10">
         <h1 class="text-5xl md:text-6xl font-bold mb-3 text-white">
-          Sleek<span class="text-orange-500">CMS</span>
+          Sky<span class="text-orange-500">Thought</span>
         </h1>
         <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
           AI-Powered Website Generator
@@ -118,6 +118,72 @@
           <div id="error" hidden class="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-700 text-sm font-medium"></div>
         </div>
 
+        <!-- Website Details Modal -->
+        <div id="website-details-modal" hidden style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 z-50">
+          <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-black mb-4">Website Details</h3>
+            <p class="text-sm text-gray-600 mb-4">Please provide some details about your website:</p>
+            
+            <form id="website-details-form" class="space-y-4">
+              <div>
+                <label for="website-name" class="block text-sm font-semibold text-black mb-2">
+                  Website Name <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="website-name"
+                  name="websiteName"
+                  required
+                  placeholder="e.g., TechCorp, MovieHub, My Portfolio"
+                  class="w-full px-4 py-2 bg-white border-2 border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                />
+              </div>
+              
+              <div>
+                <label for="website-tagline" class="block text-sm font-semibold text-black mb-2">
+                  Tagline (Optional)
+                </label>
+                <input
+                  type="text"
+                  id="website-tagline"
+                  name="tagline"
+                  placeholder="e.g., Your Trusted Partner, Discover Amazing Movies"
+                  class="w-full px-4 py-2 bg-white border-2 border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                />
+              </div>
+              
+              <div>
+                <label for="website-description" class="block text-sm font-semibold text-black mb-2">
+                  Description (Optional)
+                </label>
+                <textarea
+                  id="website-description"
+                  name="description"
+                  rows="3"
+                  placeholder="Brief description of your website..."
+                  class="w-full px-4 py-2 bg-white border-2 border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 resize-none"
+                ></textarea>
+              </div>
+              
+              <div class="flex gap-3 pt-2">
+                <button
+                  type="submit"
+                  class="flex-1 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition-colors"
+                >
+                  Continue
+                </button>
+                <button
+                  type="button"
+                  id="modal-cancel-btn"
+                  class="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition-colors"
+                >
+                  Skip
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
         <!-- Right Panel: Logs Display -->
         <div class="lg:col-span-2 bg-gray-900 border-2 border-gray-700 rounded-lg shadow-lg p-6">
           <div class="flex items-center justify-between mb-4">
@@ -188,6 +254,16 @@
         
         // Initialize
         updateRadioButtons();
+        
+        // CRITICAL: Ensure modal is hidden on page load (double-check)
+        window.addEventListener("DOMContentLoaded", () => {
+          hideModal();
+        });
+        
+        // Also ensure it's hidden after full page load
+        window.addEventListener("load", () => {
+          hideModal();
+        });
 
         function addLog(message, type = "info") {
           const isEmpty = logsContainer.querySelector(".text-gray-500");
@@ -367,24 +443,16 @@
           }
         }
 
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
+        let pendingIntent = null;
+        let pendingProvider = "openrouter";
+        let extractedDetails = null;
 
-          const intent = textarea.value.trim();
-          if (!intent) {
-            errorEl.hidden = false;
-            errorEl.textContent = "Please enter an intent first.";
-            return;
-          }
-
+        // Function to start generation with website details
+        async function startGeneration(intent, provider, websiteDetails) {
           // Clear previous logs
           logsContainer.innerHTML = "";
           currentProjectId = null;
           lastLogCount = 0;
-
-          // Get selected provider
-          const providerRadio = document.querySelector('input[name="provider"]:checked');
-          const provider = providerRadio ? providerRadio.value : "openrouter";
 
           setLoading(true);
 
@@ -392,7 +460,7 @@
             const resp = await fetch(API_BASE + "/api/generate-website", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ intent, provider })
+              body: JSON.stringify({ intent, provider, websiteDetails })
             });
 
             if (!resp.ok) {
@@ -455,6 +523,140 @@
             errorEl.hidden = false;
             errorEl.textContent = (err && err.message) || "Something went wrong while generating the website.";
             addLog(`✗ Error: ${err.message || "Generation failed"}`, "error");
+          }
+        }
+
+        // Modal elements
+        const modal = document.getElementById("website-details-modal");
+        const modalForm = document.getElementById("website-details-form");
+        const modalCancelBtn = document.getElementById("modal-cancel-btn");
+
+        // CRITICAL: Function to hide modal (both attribute and style)
+        function hideModal() {
+          if (modal) {
+            modal.hidden = true;
+            modal.style.display = "none";
+          }
+        }
+
+        // CRITICAL: Function to show modal (both attribute and style)
+        function showModal() {
+          if (modal) {
+            modal.hidden = false;
+            modal.style.display = "flex";
+            // Add flex classes dynamically
+            if (!modal.classList.contains("flex")) {
+              modal.classList.add("flex", "items-center", "justify-center");
+            }
+          }
+        }
+
+        // CRITICAL: Ensure modal is ALWAYS hidden on page load
+        hideModal();
+
+        // Handle modal form submission
+        modalForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          
+          // Validate we have a pending intent before proceeding
+          if (!pendingIntent || !pendingIntent.trim()) {
+            errorEl.hidden = false;
+            errorEl.textContent = "Please enter an intent first.";
+            hideModal();
+            return;
+          }
+          
+          const formData = new FormData(modalForm);
+          const websiteDetails = {
+            websiteName: formData.get("websiteName"),
+            tagline: formData.get("tagline") || undefined,
+            description: formData.get("description") || undefined
+          };
+          hideModal();
+          await startGeneration(pendingIntent, pendingProvider, websiteDetails);
+        });
+
+        // Handle modal cancel (skip)
+        modalCancelBtn.addEventListener("click", async () => {
+          // Validate we have a pending intent before proceeding
+          if (!pendingIntent || !pendingIntent.trim()) {
+            errorEl.hidden = false;
+            errorEl.textContent = "Please enter an intent first.";
+            hideModal();
+            return;
+          }
+          
+          hideModal();
+          await startGeneration(pendingIntent, pendingProvider, null);
+        });
+
+        // Original form submit handler
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // CRITICAL: Hide modal and clear errors at the start
+          hideModal();
+          errorEl.hidden = true;
+
+          const intent = textarea.value.trim();
+          
+          // STEP 1: Validate intent is not empty
+          if (!intent || intent.length === 0) {
+            errorEl.hidden = false;
+            errorEl.textContent = "Please enter an intent first.";
+            hideModal();
+            return;
+          }
+
+          // Get selected provider
+          const providerRadio = document.querySelector('input[name="provider"]:checked');
+          const provider = providerRadio ? providerRadio.value : "openrouter";
+
+          // Store for later use
+          pendingIntent = intent;
+          pendingProvider = provider;
+          extractedDetails = null;
+
+          // STEP 2: Extract website details from intent
+          try {
+            const extractResp = await fetch(API_BASE + "/api/extract-website-details", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ intent, provider })
+            });
+
+            // STEP 3: Check if extraction succeeded
+            if (extractResp.ok) {
+              extractedDetails = await extractResp.json();
+              
+              // STEP 4: Check if website name is missing
+              // Only show modal if we have a valid intent AND extraction succeeded AND websiteName is missing
+              if (!extractedDetails || !extractedDetails.websiteName || extractedDetails.websiteName.trim().length === 0) {
+                // Final validation: ensure intent is still valid
+                if (pendingIntent && pendingIntent.trim().length > 0) {
+                  // Clear modal form and show it
+                  modalForm.reset();
+                  showModal();
+                  return; // Stop here, wait for user to fill modal
+                } else {
+                  // Intent became invalid somehow, show error instead
+                  errorEl.hidden = false;
+                  errorEl.textContent = "Please enter an intent first.";
+                  hideModal();
+                  return;
+                }
+              }
+              
+              // If website name exists, proceed with generation
+              await startGeneration(intent, provider, extractedDetails);
+            } else {
+              // Extraction API failed, proceed without details
+              await startGeneration(intent, provider, null);
+            }
+          } catch (err) {
+            console.error("Error extracting website details:", err);
+            // Extraction failed, proceed without details
+            await startGeneration(intent, provider, null);
           }
         });
       })();

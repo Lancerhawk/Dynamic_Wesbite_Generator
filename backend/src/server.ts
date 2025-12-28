@@ -48,16 +48,42 @@ app.post("/api/analyze-intent", async (req: Request<unknown, unknown, AnalyzeInt
   }
 });
 
-interface GenerateWebsiteRequestBody {
+interface ExtractWebsiteDetailsRequestBody {
   intent: string;
   provider?: ModelProvider;
 }
+
+interface GenerateWebsiteRequestBody {
+  intent: string;
+  provider?: ModelProvider;
+  websiteDetails?: {
+    websiteName?: string;
+    tagline?: string;
+    description?: string;
+  };
+}
+
+app.post("/api/extract-website-details", async (req: Request<unknown, unknown, ExtractWebsiteDetailsRequestBody>, res: Response) => {
+  try {
+    const { intent, provider = "openrouter" } = req.body;
+    if (!intent || typeof intent !== "string") {
+      return res.status(400).json({ error: "Missing or invalid 'intent' in request body." });
+    }
+
+    const { extractWebsiteDetails } = await import("./website-details-extractor");
+    const details = await extractWebsiteDetails(intent, provider);
+    return res.json(details);
+  } catch (err) {
+    console.error("Error in /api/extract-website-details:", err);
+    return res.status(500).json({ error: "Failed to extract website details." });
+  }
+});
 
 app.post(
   "/api/generate-website",
   async (req: Request<unknown, unknown, GenerateWebsiteRequestBody>, res: Response) => {
     try {
-      const { intent, provider = "openrouter" } = req.body;
+      const { intent, provider = "openrouter", websiteDetails } = req.body;
       if (!intent || typeof intent !== "string") {
         return res.status(400).json({ error: "Missing or invalid 'intent' in request body." });
       }
@@ -112,7 +138,8 @@ app.post(
             GENERATED_SITES_ROOT,
             "/generated-sites",
             provider,
-            projectId
+            projectId,
+            websiteDetails
           );
         } catch (err) {
           console.error("Error in background generation:", err);
@@ -200,8 +227,13 @@ app.post("/api/generate-page", async (req: Request<unknown, unknown, GeneratePag
     const fileName = `${intent.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")}.html`;
     const purpose = `Page for: ${intent}${context ? ` (Context: ${context})` : ""}${location ? ` (Location: ${location})` : ""}`;
 
+    // Get list of existing HTML pages in the project
+    const existingFiles = fs.readdirSync(projectDir).filter(f => f.endsWith(".html"));
+    const existingPages = existingFiles.length > 0 ? existingFiles : ["index.html"];
+    
     console.log(`[server] Generating dynamic page "${fileName}" for project ${projectId}`);
-    const pageContent = await generateFile(fileName, purpose, filteredData, analysis.dataSource, provider);
+    // For dynamic pages, we don't have website details, so pass undefined (will use default)
+    const pageContent = await generateFile(fileName, purpose, filteredData, analysis.dataSource, provider, intent, existingPages, undefined);
 
     const pagePath = path.join(projectDir, fileName);
     fs.writeFileSync(pagePath, pageContent, "utf-8");
