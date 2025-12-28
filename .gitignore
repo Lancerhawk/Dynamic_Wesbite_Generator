@@ -1,2 +1,5 @@
 .env
 generated-sites
+node_modules
+*.log
+.DS_Store

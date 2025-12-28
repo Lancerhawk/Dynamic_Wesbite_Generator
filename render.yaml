@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: ai-website-generator-backend
+    env: node
+    plan: free
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: anthropic/claude-sonnet-4.5
+      - key: OPENROUTER_SITE_URL
+        value: https://your-frontend-name.vercel.app
+      - key: OPENROUTER_SITE_NAME
+        value: AI Website Generator
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-3-haiku-20240307
+      - key: VERCEL_TOKEN
+        sync: false
+      - key: FRONTEND_URL
+        value: https://your-frontend-name.vercel.app
+

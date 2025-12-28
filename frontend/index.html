@@ -5,6 +5,8 @@
     <title>SkyThought - AI Website Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- API Configuration - Loaded before main script -->
+    <script src="./config.js"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -228,7 +230,11 @@
         const radioOpenRouter = document.getElementById("radio-openrouter");
         const radioAnthropic = document.getElementById("radio-anthropic");
 
-        const API_BASE = "http://localhost:3000";
+        // API Base URL - from config.js (set via environment variables in Vercel)
+        const API_BASE = window.API_CONFIG?.API_BASE || 
+          (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? "http://localhost:3000"
+            : "https://your-backend-name.onrender.com"); // Fallback if config.js not loaded
         let currentProjectId = null;
         let logPollInterval = null;
         let lastLogCount = 0;

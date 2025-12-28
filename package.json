@@ -1,0 +1,13 @@
+{
+  "name": "ai-website-generator",
+  "version": "2.0.0",
+  "description": "AI-Powered Website Generator - Frontend and Backend",
+  "scripts": {
+    "build:frontend": "node frontend/build.js",
+    "dev:backend": "cd backend && npm run dev",
+    "build:backend": "cd backend && npm run build",
+    "start:backend": "cd backend && npm start"
+  },
+  "private": true
+}
+
