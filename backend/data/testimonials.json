@@ -1,0 +1,63 @@
+[
+  {
+    "id": "test-1",
+    "name": "Sarah Johnson",
+    "role": "CEO, StartupXYZ",
+    "company": "TechFlow Solutions",
+    "location": "San Francisco, USA",
+    "rating": 5,
+    "text": "CloudSync Pro transformed how our team collaborates. The seamless integration and security features are outstanding.",
+    "image": "https://via.placeholder.com/100"
+  },
+  {
+    "id": "test-2",
+    "name": "Michael Chen",
+    "role": "Homeowner",
+    "company": "GreenEnergy Corp",
+    "location": "Delhi, India",
+    "rating": 5,
+    "text": "Installed SolarPanel Max six months ago. My electricity bills dropped by 80%! Highly recommend.",
+    "image": "https://via.placeholder.com/100"
+  },
+  {
+    "id": "test-3",
+    "name": "Dr. Priya Nair",
+    "role": "General Practitioner",
+    "company": "MediCare Plus",
+    "location": "Bangalore, India",
+    "rating": 5,
+    "text": "HealthConnect makes it so easy to consult with patients remotely. The platform is intuitive and reliable.",
+    "image": "https://via.placeholder.com/100"
+  },
+  {
+    "id": "test-4",
+    "name": "Rahul Sharma",
+    "role": "Student",
+    "company": "EduLearn Academy",
+    "location": "Mumbai, India",
+    "rating": 5,
+    "text": "LearnPro helped me complete my certification in just 3 months. The courses are well-structured and engaging.",
+    "image": "https://via.placeholder.com/100"
+  },
+  {
+    "id": "test-5",
+    "name": "Lisa Anderson",
+    "role": "Small Business Owner",
+    "company": "FinTech Innovations",
+    "location": "New York, USA",
+    "rating": 5,
+    "text": "PayWave Wallet simplified all my business transactions. Fast, secure, and user-friendly.",
+    "image": "https://via.placeholder.com/100"
+  },
+  {
+    "id": "test-6",
+    "name": "David Kim",
+    "role": "IT Director",
+    "company": "TechFlow Solutions",
+    "location": "Seoul, South Korea",
+    "rating": 4,
+    "text": "CloudSync Pro is a game-changer for our distributed team. Great product with excellent support.",
+    "image": "https://via.placeholder.com/100"
+  }
+]
+

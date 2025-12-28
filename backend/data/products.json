@@ -1,0 +1,89 @@
+[
+  {
+    "id": "prod-1",
+    "name": "CloudSync Pro",
+    "company": "TechFlow Solutions",
+    "category": "Software",
+    "description": "Enterprise cloud storage and collaboration platform",
+    "personas": ["IT Managers", "Team Leaders", "Remote Workers"],
+    "useCases": [
+      "Secure file sharing across teams",
+      "Real-time collaboration on documents",
+      "Automated backup and sync"
+    ],
+    "price": "$29/month",
+    "trialDays": 14,
+    "features": ["Unlimited storage", "End-to-end encryption", "Real-time sync", "Mobile apps"],
+    "logo": "https://via.placeholder.com/150"
+  },
+  {
+    "id": "prod-2",
+    "name": "SolarPanel Max",
+    "company": "GreenEnergy Corp",
+    "category": "Hardware",
+    "description": "High-efficiency solar panels for residential and commercial use",
+    "personas": ["Homeowners", "Business Owners", "Property Developers"],
+    "useCases": [
+      "Reduce electricity bills",
+      "Sustainable energy source",
+      "Off-grid power solutions"
+    ],
+    "price": "$2,500/panel",
+    "trialDays": 0,
+    "features": ["25-year warranty", "30% efficiency", "Weather resistant", "Easy installation"],
+    "logo": "https://via.placeholder.com/150"
+  },
+  {
+    "id": "prod-3",
+    "name": "HealthConnect App",
+    "company": "MediCare Plus",
+    "category": "Mobile App",
+    "description": "Telemedicine platform connecting patients with doctors",
+    "personas": ["Patients", "Doctors", "Healthcare Providers"],
+    "useCases": [
+      "Video consultations with doctors",
+      "Prescription management",
+      "Health record tracking"
+    ],
+    "price": "Free (premium $9.99/month)",
+    "trialDays": 30,
+    "features": ["24/7 doctor access", "Prescription delivery", "Health records", "Insurance integration"],
+    "logo": "https://via.placeholder.com/150"
+  },
+  {
+    "id": "prod-4",
+    "name": "LearnPro Platform",
+    "company": "EduLearn Academy",
+    "category": "SaaS",
+    "description": "Comprehensive online learning management system",
+    "personas": ["Students", "Teachers", "Educational Institutions"],
+    "useCases": [
+      "Online course creation",
+      "Student progress tracking",
+      "Interactive learning experiences"
+    ],
+    "price": "$49/month",
+    "trialDays": 7,
+    "features": ["Unlimited courses", "Video hosting", "Quizzes & assessments", "Certificates"],
+    "logo": "https://via.placeholder.com/150"
+  },
+  {
+    "id": "prod-5",
+    "name": "PayWave Wallet",
+    "company": "FinTech Innovations",
+    "category": "Mobile App",
+    "description": "Digital wallet for seamless payments and money transfers",
+    "personas": ["Consumers", "Small Businesses", "Merchants"],
+    "useCases": [
+      "Quick payments",
+      "Money transfers",
+      "Bill payments",
+      "Merchant transactions"
+    ],
+    "price": "Free",
+    "trialDays": 0,
+    "features": ["Zero transaction fees", "Instant transfers", "QR code payments", "Rewards program"],
+    "logo": "https://via.placeholder.com/150"
+  }
+]
+

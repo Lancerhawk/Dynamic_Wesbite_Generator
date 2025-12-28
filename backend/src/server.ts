@@ -11,18 +11,68 @@ import { generateWebsite, getGenerationStatus, getProjectLogs, GenerationStatus 
 import { generateFile } from "./file-generator";
 import { ModelProvider } from "./anthropic-client";
 
-const PROJECT_ROOT = path.resolve(__dirname, "..", "..");
+// Determine project root - works in both development and production (Render)
+const PROJECT_ROOT = process.env.NODE_ENV === 'production' 
+  ? path.resolve(__dirname, "..") // In production, backend is the root
+  : path.resolve(__dirname, "..", ".."); // In development, go up two levels
 
-dotenv.config({ path: path.join(PROJECT_ROOT, ".env") });
+// Load .env file if it exists (for local development)
+// Check multiple locations: root .env, backend/.env, or use system env vars
+const rootEnvPath = path.join(PROJECT_ROOT, ".env");
+const backendEnvPath = path.join(__dirname, "..", ".env");
+
+if (fs.existsSync(rootEnvPath)) {
+  // Root .env file (preferred for local development)
+  dotenv.config({ path: rootEnvPath });
+  console.log("[server] Loaded .env from project root");
+} else if (fs.existsSync(backendEnvPath)) {
+  // Backend/.env file (alternative location)
+  dotenv.config({ path: backendEnvPath });
+  console.log("[server] Loaded .env from backend directory");
+} else {
+  // In production (Render), environment variables are set directly
+  // Also works if no .env file exists (uses system environment variables)
+  dotenv.config();
+  console.log("[server] Using system environment variables");
+}
 
 const app = express();
 
-app.use(cors());
+// CORS configuration - allow frontend domain
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  process.env.FRONTEND_URL || 'https://your-frontend-name.vercel.app' // Replace with your Vercel frontend URL
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: "2mb" }));
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
-const DATA_ROOT = path.join(PROJECT_ROOT, "data");
-const GENERATED_SITES_ROOT = path.join(PROJECT_ROOT, "generated-sites");
+
+// Data paths - handle both development and production
+// In production (Render), data folder should be in backend directory or copied during build
+const DATA_ROOT = process.env.NODE_ENV === 'production'
+  ? (fs.existsSync(path.join(__dirname, "..", "data")) 
+      ? path.join(__dirname, "..", "data")
+      : path.join(PROJECT_ROOT, "data"))
+  : path.join(PROJECT_ROOT, "data");
+
+const GENERATED_SITES_ROOT = process.env.NODE_ENV === 'production'
+  ? path.join(__dirname, "..", "generated-sites")
+  : path.join(PROJECT_ROOT, "generated-sites");
 
 if (!fs.existsSync(GENERATED_SITES_ROOT)) {
   fs.mkdirSync(GENERATED_SITES_ROOT, { recursive: true });

@@ -1,0 +1,128 @@
+[
+  {
+    "id": "comp-1",
+    "name": "TechFlow Solutions",
+    "industry": "Software Development",
+    "location": "Delhi, India",
+    "founded": 2018,
+    "employees": 150,
+    "summary": "Leading software development company specializing in AI and cloud solutions",
+    "mission": "To empower businesses with cutting-edge technology solutions that drive innovation and growth",
+    "vision": "To be the most trusted technology partner for businesses worldwide",
+    "people": [
+      {
+        "name": "Rajesh Kumar",
+        "role": "CEO & Founder",
+        "bio": "20+ years in tech, former VP at Microsoft"
+      },
+      {
+        "name": "Priya Sharma",
+        "role": "CTO",
+        "bio": "Expert in AI/ML, PhD in Computer Science"
+      }
+    ],
+    "website": "https://techflow.com",
+    "logo": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "comp-2",
+    "name": "GreenEnergy Corp",
+    "industry": "Renewable Energy",
+    "location": "Mumbai, India",
+    "founded": 2015,
+    "employees": 300,
+    "summary": "Pioneering renewable energy solutions for sustainable future",
+    "mission": "To accelerate the transition to clean energy worldwide",
+    "vision": "A world powered 100% by renewable energy",
+    "people": [
+      {
+        "name": "Amit Patel",
+        "role": "CEO",
+        "bio": "Renewable energy expert with 15 years experience"
+      },
+      {
+        "name": "Sneha Reddy",
+        "role": "Head of Engineering",
+        "bio": "Solar technology innovator"
+      }
+    ],
+    "website": "https://greenenergy.com",
+    "logo": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "comp-3",
+    "name": "MediCare Plus",
+    "industry": "Healthcare",
+    "location": "Bangalore, India",
+    "founded": 2020,
+    "employees": 500,
+    "summary": "Digital healthcare platform connecting patients with quality care",
+    "mission": "Making healthcare accessible and affordable for everyone",
+    "vision": "Healthcare for all, powered by technology",
+    "people": [
+      {
+        "name": "Dr. Anjali Mehta",
+        "role": "CEO & Co-founder",
+        "bio": "Medical doctor turned entrepreneur"
+      },
+      {
+        "name": "Vikram Singh",
+        "role": "CTO",
+        "bio": "Healthcare tech specialist"
+      }
+    ],
+    "website": "https://medicareplus.com",
+    "logo": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "comp-4",
+    "name": "EduLearn Academy",
+    "industry": "Education Technology",
+    "location": "Pune, India",
+    "founded": 2019,
+    "employees": 200,
+    "summary": "Online learning platform offering courses in tech, business, and creative skills",
+    "mission": "Democratizing education through technology",
+    "vision": "Every learner achieving their full potential",
+    "people": [
+      {
+        "name": "Kiran Desai",
+        "role": "Founder & CEO",
+        "bio": "Education reform advocate"
+      },
+      {
+        "name": "Ravi Nair",
+        "role": "Head of Content",
+        "bio": "Curriculum design expert"
+      }
+    ],
+    "website": "https://edulearn.com",
+    "logo": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "comp-5",
+    "name": "FinTech Innovations",
+    "industry": "Financial Technology",
+    "location": "Hyderabad, India",
+    "founded": 2017,
+    "employees": 400,
+    "summary": "Revolutionizing digital payments and financial services",
+    "mission": "Making financial services simple, secure, and accessible",
+    "vision": "Financial inclusion for billions",
+    "people": [
+      {
+        "name": "Arjun Malhotra",
+        "role": "CEO",
+        "bio": "FinTech veteran, former banker"
+      },
+      {
+        "name": "Meera Joshi",
+        "role": "Chief Product Officer",
+        "bio": "Product innovation leader"
+      }
+    ],
+    "website": "https://fintechinnovations.com",
+    "logo": "https://via.placeholder.com/200"
+  }
+]
+

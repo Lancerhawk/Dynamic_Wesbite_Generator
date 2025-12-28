@@ -1,0 +1,48 @@
+[
+  {
+    "id": "dir-1",
+    "name": "Rajkumar Hirani",
+    "location": "Mumbai, India",
+    "bestFilms": ["3 Idiots", "PK", "Sanju", "Munna Bhai MBBS"],
+    "about": "Acclaimed director known for comedy-dramas with social messages",
+    "awards": ["National Film Award", "Filmfare Awards"],
+    "image": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "dir-2",
+    "name": "Sanjay Leela Bhansali",
+    "location": "Mumbai, India",
+    "bestFilms": ["Padmaavat", "Bajirao Mastani", "Devdas", "Black"],
+    "about": "Master of grand visual storytelling and period dramas",
+    "awards": ["National Film Award", "Filmfare Awards", "Padma Shri"],
+    "image": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "dir-3",
+    "name": "Zoya Akhtar",
+    "location": "Mumbai, India",
+    "bestFilms": ["Gully Boy", "Zindagi Na Milegi Dobara", "Dil Dhadakne Do"],
+    "about": "Contemporary filmmaker known for realistic and relatable stories",
+    "awards": ["Filmfare Awards", "IIFA Awards"],
+    "image": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "dir-4",
+    "name": "Anurag Kashyap",
+    "location": "Mumbai, India",
+    "bestFilms": ["Gangs of Wasseypur", "Dev.D", "Black Friday", "Ugly"],
+    "about": "Independent filmmaker known for gritty, realistic cinema",
+    "awards": ["Filmfare Awards", "Cannes Film Festival"],
+    "image": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "dir-5",
+    "name": "Imtiaz Ali",
+    "location": "Mumbai, India",
+    "bestFilms": ["Jab We Met", "Rockstar", "Highway", "Tamasha"],
+    "about": "Director known for romantic dramas and character-driven stories",
+    "awards": ["Filmfare Awards", "IIFA Awards"],
+    "image": "https://via.placeholder.com/200"
+  }
+]
+

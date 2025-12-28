@@ -1,0 +1,52 @@
+[
+  {
+    "id": "actor-1",
+    "name": "Amitabh Bachchan",
+    "gender": "Male",
+    "location": "Mumbai, India",
+    "about": "One of the most influential actors in Indian cinema with a career spanning over five decades, known for powerful performances and longevity.",
+    "bestFilms": ["Sholay", "Deewar", "Zanjeer", "Don"],
+    "awards": ["Padma Vibhushan", "National Film Award", "Filmfare Awards"],
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/BACHCHAN_Amitabh_03-24x30-2009.jpg/640px-BACHCHAN_Amitabh_03-24x30-2009.jpg"
+  },
+  {
+    "id": "actor-2",
+    "name": "Priyanka Chopra",
+    "gender": "Female",
+    "location": "Mumbai, India",
+    "about": "Indian actress and producer who transitioned successfully from Bollywood to Hollywood after winning Miss World 2000.",
+    "bestFilms": ["Bajirao Mastani", "Barfi!", "Fashion", "Mary Kom"],
+    "awards": ["National Film Award", "Padma Shri", "People's Choice Award"],
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Priyanka_Chopra_at_Filmfare_Awards_2013.jpg/640px-Priyanka_Chopra_at_Filmfare_Awards_2013.jpg"
+  },
+  {
+    "id": "actor-3",
+    "name": "Shah Rukh Khan",
+    "gender": "Male",
+    "location": "Mumbai, India",
+    "about": "Globally recognized Indian film actor often referred to as the 'King of Bollywood', known for romantic and dramatic roles.",
+    "bestFilms": ["Dilwale Dulhania Le Jayenge", "My Name Is Khan", "Chak De! India", "Swades"],
+    "awards": ["Padma Shri", "Filmfare Awards", "IIFA Awards"],
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Shah_Rukh_Khan_graces_the_launch_of_the_new_Santro.jpg/640px-Shah_Rukh_Khan_graces_the_launch_of_the_new_Santro.jpg"
+  },
+  {
+    "id": "actor-4",
+    "name": "Deepika Padukone",
+    "gender": "Female",
+    "location": "Bangalore, India",
+    "about": "One of India’s highest-paid actresses, known for strong female-led performances and international presence.",
+    "bestFilms": ["Padmaavat", "Bajirao Mastani", "Piku", "Chennai Express"],
+    "awards": ["Filmfare Awards", "IIFA Awards", "Screen Awards"],
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Deepika_endorses_Yamaha_scooters_02.jpg/640px-Deepika_endorses_Yamaha_scooters_02.jpg"
+  },
+  {
+    "id": "actor-5",
+    "name": "Aamir Khan",
+    "gender": "Male",
+    "location": "Mumbai, India",
+    "about": "Actor and filmmaker known for perfectionism and socially impactful cinema with strong box-office success.",
+    "bestFilms": ["Dangal", "3 Idiots", "PK", "Lagaan"],
+    "awards": ["Padma Bhushan", "National Film Award", "Filmfare Awards"],
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Aamir_Khan_%28Berlin_Film_Festival_2011%29.jpg/640px-Aamir_Khan_%28Berlin_Film_Festival_2011%29.jpg"
+  }
+]
